@@ -1,6 +1,7 @@
 require("dotenv").config()
 const path = require("path")
 const express = require("express")
+const db = require("./database")
 
 // Configurando Express
 const app = express()
@@ -13,9 +14,9 @@ app.engine("html", require("ejs").renderFile)
 const routes = require("./router").loadAllRoutes()
 Object.entries(routes).forEach(([key, value]) => {
     if (key === "get") {
-        app.get(value.uri, (request, response) => value.execute(request, response))
+        app.get(value.uri, (request, response) => value.execute(request, response, db))
     } else if (key === "post") {
-        app.set(value.uri, (request, response) => value.execute(request, response))
+        app.set(value.uri, (request, response) => value.execute(request, response, db))
     }
 })
 
