@@ -2,6 +2,7 @@ require("dotenv").config()
 const path = require("path")
 const express = require("express")
 const db = require("./database")
+const session = require("express-session")
 
 // Configurando Express
 const app = express()
@@ -9,6 +10,15 @@ app.use(express.json())
 app.set("views", path.join(__dirname, "public"))
 app.set("view engine", "ejs")
 app.engine("html", require("ejs").renderFile)
+app.use(session({
+    secret : process.env.SESSION_KEY,
+    resave : false,
+    saveUninitialized : true,
+    cookie : {
+        maxAge : 1000 * 60 * 60 * 3, // Tempo de vida de cookie em milissegundos (3 horas)
+        secure : false //TODO: mudar para 'true' quando o servidor usar https
+    }
+}))
 
 // Registrando todas as rotas encontradas na pasta routes
 const routes = require("./router").loadAllRoutes()
