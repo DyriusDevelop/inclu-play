@@ -22,17 +22,17 @@ app.use(session({
 
 // Registrando todas as rotas encontradas na pasta routes
 const routes = require("./router").loadAllRoutes()
-Object.entries(routes).forEach(([key, value]) => {
-    if (key === "get") {
-        app.get(value.uri, (request, response) => value.execute(request, response, db))
-    } else if (key === "post") {
-        app.set(value.uri, (request, response) => value.execute(request, response, db))
+routes.forEach((route) => {
+    if (route.method === "get") {
+        app.get(route.uri, (request, response) => route.execute(request, response, db))
+    } else if (route.method === "post") {
+        app.set(route.uri, (request, response) => route.execute(request, response, db))
     }
 })
 
 // Execução do programa
 const server = app.listen(process.env.PORT, () => {
-    console.log(`Executando servidor em localhost:${process.env.PORT}`)
+    console.log(`Executando servidor em http://www.localhost:${process.env.PORT}`)
 })
 
 // Registrando evento de desligamento
