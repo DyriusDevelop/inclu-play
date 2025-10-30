@@ -1,7 +1,11 @@
 module.exports = {
     method : "get",
-    uri : "/",
-    execute(request, respose, db) {
-        respose.render("home", {title : "Principal"})
+    uri : "",
+    execute(request, response, db) {
+        if (request.session && request.session.loggedUser) {
+            response.render("home", {title : "Principal"})
+        } else {
+            response.redirect("/login")
+        }
     }
 }
