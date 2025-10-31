@@ -5,15 +5,16 @@ const loadAllRoutes = () => {
     let rootPath = path.join(__dirname, "routes")
     let routesFiles = fs.readdirSync(rootPath).filter(file => file.endsWith(".js"))
     
-    let routes = []
+    let all = []
     for (let file of routesFiles) {
-        let route = require(path.join(rootPath, file))
-        if ("method" in route && "uri" in route && "execute" in route) {
-            routes.push(route)
-        }
+        let routes = require(path.join(rootPath, file))
+        routes.forEach((route) => {
+            if ("method" in route && "uri" in route && "execute" in route) {
+                all.push(route)
+            }
+        })
     }
-
-    return routes
+    return all
 }
 
 module.exports = { loadAllRoutes }
