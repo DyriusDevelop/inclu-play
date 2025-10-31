@@ -19,16 +19,15 @@ app.use(session({
         secure : false //TODO: mudar para 'true' quando o servidor usar https
     }
 }))
+app.use(express.urlencoded({ extended : true }))
 
 // Registrando todas as rotas encontradas na pasta routes
-const routes = require("./router").loadAllRoutes()
-routes.forEach((route) => {
-    if (route.method === "get") {
-        app.get(route.uri, (request, response) => route.execute(request, response, db))
-    } else if (route.method === "post") {
-        app.set(route.uri, (request, response) => route.execute(request, response, db))
-    }
+const allRoutes = require("./router").loadAllRoutes()
+allRoutes.forEach((route) => {
+    console.log(route)
+    app[route.method](route.uri, (request, response) => route.execute(request, response, db))
 })
+
 
 // Execução do programa
 const server = app.listen(process.env.PORT, () => {
